@@ -1,12 +1,13 @@
-# Prosperity 4 trader
+# prosperity 4 trader
 
-IMC Prosperity 4 (April 2025) algorithmic trading competition. Two product strategies:
+my bot for imc prosperity 4 (april 2025), an algorithmic trading game.
 
-**EMERALDS**: stable market-making around the wall mid. Hit 1022 XIRECs in v2 and left it alone after that.
+two products to trade: emeralds (stable) and tomatoes (noisier).
 
-**TOMATOES**: combined-signal market-making. Found `-0.44` lag-1 autocorrelation (after a +2 move, next step reverses ~1.4 on average, 64% directional accuracy). Layered a volume-asymmetry signal (bid_vol vs ask_vol, 0.22 correlation). Combined signal: 0.61 correlation, ~73.7% directional accuracy. Used to shift fair value before quoting.
+- emeralds: just market making around a fixed fair value of 10000.
+- tomatoes: same market making but the fair value gets shifted based on the recent price move (after an up move, lower fair, and vice versa). i found tomatoes had a slight mean reversion in the data so this was the simplest way to use it.
 
-## Files
+## files
 
-- `prosperity_trader_v6.py` - v6, mean-reversion signal only
-- `prosperity_trader_v8.py` - v8, combined signal (final submission)
+- `prosperity_trader_v6.py` - earlier version, mean reversion only
+- `prosperity_trader_v8.py` - final version, adds a small volume signal on top
