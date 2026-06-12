@@ -1,22 +1,8 @@
-# =============================================================================
-# PROSPERITY 4 - V6: V2 + Mean Reversion Signal
-#
-# EMERALDS: Exact V2 logic. Proven 1022 XIRECs. Don't touch what works.
-#
-# TOMATOES: V2 logic + adjusted fair value.
-#   Discovery: Tomatoes has -0.44 lag-1 autocorrelation.
-#   After a +2 move, next step reverses by ~1.4 on average (64% accuracy).
-#   We exploit this by shifting fair value: 
-#     adjusted_fair = wall_mid - 0.4 * last_return
-#   All other V2 parameters (spread, skew, thresholds) unchanged.
-#   The adjusted fair naturally makes us more aggressive selling after
-#   up-moves and more aggressive buying after down-moves.
-# =============================================================================
+# prosperity 4 v6 - market making with a mean reversion shift on tomatoes
 
 from datamodel import OrderDepth, TradingState, Order
 from typing import List, Dict
 import json
-
 
 class Trader:
 
@@ -54,23 +40,17 @@ class Trader:
         trader_data = json.dumps(new_state)
         return result, conversions, trader_data
 
-    # =========================================================================
     # HELPER: Get sorted order book
-    # =========================================================================
     def get_sorted_book(self, order_depth: OrderDepth):
         sells = sorted(order_depth.sell_orders.items())
         buys = sorted(order_depth.buy_orders.items(), reverse=True)
         return sells, buys
 
-    # =========================================================================
     # HELPER: Calculate inventory skew
-    # =========================================================================
     def inventory_skew(self, position: int, pos_limit: int) -> float:
         return position / pos_limit if pos_limit > 0 else 0.0
 
-    # =========================================================================
     # EMERALDS - EXACT V2 LOGIC (proven 1022 XIRECs, don't change)
-    # =========================================================================
     def trade_emeralds(self, state: TradingState) -> List[Order]:
         orders: List[Order] = []
         product = "EMERALDS"
@@ -124,9 +104,7 @@ class Trader:
 
         return orders
 
-    # =========================================================================
     # TOMATOES - V2 logic + mean reversion adjusted fair value
-    # =========================================================================
     def trade_tomatoes(self, state: TradingState, prev_state: dict):
         orders: List[Order] = []
         product = "TOMATOES"

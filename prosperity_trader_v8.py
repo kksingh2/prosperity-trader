@@ -1,19 +1,8 @@
-# =============================================================================
-# PROSPERITY 4 - V8: Combined Signal Market Making
-#
-# EMERALDS: Exact V2 (proven 1022 XIRECs - don't change)
-#
-# TOMATOES: V2 + combined signal for fair value adjustment
-#   Signal 1: Mean reversion (lag-1 autocorrelation -0.44)
-#   Signal 2: Volume asymmetry (bid_vol vs ask_vol, correlation 0.22)
-#   Combined: 0.61 correlation, 73.7% directional accuracy
-#   adjusted_fair = raw_fair + signal_adjustment
-# =============================================================================
+# prosperity 4 v8 - market making with a combined signal on tomatoes
 
 from datamodel import OrderDepth, TradingState, Order
 from typing import List, Dict
 import json
-
 
 class Trader:
 
@@ -53,9 +42,7 @@ class Trader:
     def inventory_skew(self, position: int, pos_limit: int) -> float:
         return position / pos_limit if pos_limit > 0 else 0.0
 
-    # =========================================================================
     # EMERALDS - EXACT V2 (proven, untouched)
-    # =========================================================================
     def trade_emeralds(self, state: TradingState) -> List[Order]:
         orders: List[Order] = []
         product = "EMERALDS"
@@ -107,9 +94,7 @@ class Trader:
 
         return orders
 
-    # =========================================================================
     # TOMATOES - V2 + combined volume asymmetry & mean reversion signal
-    # =========================================================================
     def trade_tomatoes(self, state: TradingState, prev: dict):
         orders: List[Order] = []
         product = "TOMATOES"
