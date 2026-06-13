@@ -1,17 +1,23 @@
-# prosperity 4 trader
+# Prosperity 4 Trader
 
-a bot for imc prosperity 4 (april 2025), an algorithmic trading game with two products to trade.
+My bot for IMC Prosperity 4 (April 2025), an algorithmic trading game with two products to trade: Emeralds, which barely move, and Tomatoes, which are noisier.
 
-**emeralds**: they barely move. i just quote a buy and a sell price around 10000 (their stable value).
+## How the bot works
 
-**tomatoes**: they move more. looking at the data i noticed that when tomatoes go up by a bit they tend to come back down on the next step. so on tomatoes the bot shifts where it thinks the fair price is, based on the last move:
+For both products the bot is a market maker: it offers to buy a little below the fair price and sell a little above, and earns the small gap each time someone trades with it.
 
-- if tomatoes just went up, the bot quotes a bit lower (it expects them to come back down)
-- if they just went down, the bot quotes a bit higher
+**Emeralds** are stable, so the bot just quotes around their fixed fair value of 10,000.
 
-this is called mean reversion - the price tends to revert back to the average.
+**Tomatoes** get one extra idea. Looking at the data, I noticed that when Tomatoes jump up they tend to drift back down on the next step, and vice versa. This is called mean reversion. So on Tomatoes the bot shifts where it thinks the fair price is, based on the last move:
 
-## files
+- If Tomatoes just went up, it quotes a bit lower, expecting a pull-back.
+- If they just went down, it quotes a bit higher.
 
-- `prosperity_trader_v6.py` is the earlier version with just the mean reversion shift
-- `prosperity_trader_v8.py` is the later version, adds a small extra signal that looks at whether more volume is on the buy side or the sell side
+## Files
+
+- `prosperity_trader_v6.py` is the earlier version, with just the mean-reversion shift.
+- `prosperity_trader_v8.py` is the final version. It adds a small extra signal that looks at whether more buying or more selling volume is sitting in the order book.
+
+## Run it
+
+The bot plugs into IMC's Prosperity engine, which provides the `datamodel` module and feeds it market updates.
